@@ -16,7 +16,7 @@ from flask import Flask, request, jsonify, make_response
 load_dotenv()
 
 app = Flask(__name__)
-
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 # --- THE NUCLEAR CORS FIX ---
 @app.route('/', defaults={'path': ''}, methods=['OPTIONS'])
 @app.route('/<path:path>', methods=['OPTIONS'])
@@ -35,7 +35,7 @@ def add_cors_headers(response):
     return response
 # ----------------------------
 # Allow specific frontend origin and handle credentials/preflight
-CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
+
 # --- Database & Auth Configuration ---
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
