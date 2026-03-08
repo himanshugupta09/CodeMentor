@@ -61,4 +61,3 @@ Set `VITE_API_BASE_URL` in the frontend environment if the API is not at the def
 - For production, run the backend with a WSGI server such as `gunicorn` and use a proper RDBMS (Postgres) instead of SQLite.
 - Keep secrets out of source control. Use a `.env` and a secrets manager for deployments.
 
-If you want, I can pin exact package versions in `requirements.txt`, add a `docker-compose.yml`, or create a `Makefile` to simplify dev commands.
