@@ -113,7 +113,7 @@ function AuthScreen({ setToken, initialMode }) {
 
       localStorage.setItem('token', data.access_token);
       setToken(data.access_token);
-      navigate('/dashboard');
+      navigate('/api/dashboard');
     } catch (err) { setError(err.message); } finally { setLoading(false); }
   };
 
@@ -372,7 +372,7 @@ function ProblemTracker({ token, setToken }) {
           <h1 style={{ margin: '0 0 0.5rem 0' }}>📋 Kanban Problem Tracker</h1>
           <p style={{ color: '#666', margin: 0 }}>AI recommendations and your personal Todo list.</p>
         </div>
-        <button onClick={() => navigate('/dashboard')} style={{ padding: '8px 16px', backgroundColor: '#0070f3', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>Back to CodeMentor</button>
+        <button onClick={() => navigate('/api/dashboard')} style={{ padding: '8px 16px', backgroundColor: '#0070f3', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>Back to CodeMentor</button>
       </div>
 
       <form onSubmit={handleAddProblem} style={{ display: 'flex', gap: '1rem', marginBottom: '2rem', padding: '1rem', backgroundColor: '#f3f4f6', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
@@ -418,7 +418,7 @@ function HistoryDashboard({ token, setToken }) {
           <h1 style={{ margin: '0 0 0.5rem 0' }}>📚 My Learning Vault</h1>
           <p style={{ color: '#666', margin: 0 }}>Review your past submissions.</p>
         </div>
-        <button onClick={() => navigate('/dashboard')} style={{ padding: '8px 16px', backgroundColor: '#0070f3', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>Back to CodeMentor</button>
+        <button onClick={() => navigate('/api/dashboard')} style={{ padding: '8px 16px', backgroundColor: '#0070f3', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>Back to CodeMentor</button>
       </div>
 
       {loading ? <p>Loading your vault...</p> : history.length === 0 ? (
@@ -452,9 +452,9 @@ function App() {
     <Router>
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={!token ? <LandingPage /> : <Navigate to="/dashboard" />} />
-        <Route path="/api/login" element={!token ? <AuthScreen setToken={setToken} initialMode="login" /> : <Navigate to="/dashboard" />} />
-        <Route path="/api/signup" element={!token ? <AuthScreen setToken={setToken} initialMode="signup" /> : <Navigate to="/dashboard" />} />
+        <Route path="/" element={!token ? <LandingPage /> : <Navigate to="/api/dashboard" />} />
+        <Route path="/api/login" element={!token ? <AuthScreen setToken={setToken} initialMode="login" /> : <Navigate to="/api/dashboard" />} />
+        <Route path="/api/signup" element={!token ? <AuthScreen setToken={setToken} initialMode="signup" /> : <Navigate to="/api/dashboard" />} />
         
         {/* Protected Routes */}
         <Route path="/api/dashboard" element={token ? <Dashboard token={token} setToken={setToken} /> : <Navigate to="/api/login" />} />
