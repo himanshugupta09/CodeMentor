@@ -15,8 +15,8 @@ from google.auth.transport import requests as google_requests
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app) 
-
+# Allow specific frontend origin and handle credentials/preflight
+CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
 # --- Database & Auth Configuration ---
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
