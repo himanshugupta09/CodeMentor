@@ -11,10 +11,29 @@ from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
+from flask import Flask, request, jsonify, make_response
 
 load_dotenv()
 
 app = Flask(__name__)
+
+# --- THE NUCLEAR CORS FIX ---
+@app.route('/', defaults={'path': ''}, methods=['OPTIONS'])
+@app.route('/<path:path>', methods=['OPTIONS'])
+def handle_options(path):
+    response = make_response()
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Allow-Headers", "*")
+    response.headers.add("Access-Control-Allow-Methods", "*")
+    return response
+
+@app.after_request
+def add_cors_headers(response):
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Allow-Headers", "*")
+    response.headers.add("Access-Control-Allow-Methods", "*")
+    return response
+# ----------------------------
 # Allow specific frontend origin and handle credentials/preflight
 CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
 # --- Database & Auth Configuration ---
