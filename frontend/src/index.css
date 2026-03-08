@@ -1,0 +1,31 @@
+:root {
+  /* Default Light Theme Variables */
+  --bg-color: #ffffff;
+  --text-color: #333333;
+  --secondary-text: #666666;
+  --container-bg: #f8f9fa;
+  --border-color: #cccccc;
+  --error-bg: #ffebee;
+  --error-text: #d32f2f;
+}
+
+/* Automatically switch to these colors if the user's system is in Dark Mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --secondary-text: #aaaaaa;
+    --container-bg: #1e1e1e;
+    --border-color: #333333;
+    --error-bg: #4a1c1c;
+    --error-text: #ff8a80;
+  }
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  /* Smooth transition when toggling themes */
+  transition: background-color 0.3s ease, color 0.3s ease; 
+}

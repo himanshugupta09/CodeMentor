@@ -1,0 +1,14 @@
+Flask
+Flask-Cors
+python-dotenv
+Flask-SQLAlchemy
+Flask-Bcrypt
+Flask-JWT-Extended
+google-auth
+requests
+gunicorn
+psycopg2-binary
+
+# Optional / environment-specific (uncomment if needed)
+# bcrypt
+# sqlalchemy
