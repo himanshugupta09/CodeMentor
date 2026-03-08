@@ -14,8 +14,8 @@ function LandingPage() {
       <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem 5%', backgroundColor: 'white', borderBottom: '1px solid #eaeaea' }}>
         <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#111' }}>🧠 CodeMentor AI</div>
         <div style={{ display: 'flex', gap: '1rem' }}>
-          <button onClick={() => navigate('/login')} style={{ padding: '8px 16px', backgroundColor: 'transparent', color: '#111', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}>Log in</button>
-          <button onClick={() => navigate('/signup')} style={{ padding: '8px 16px', backgroundColor: '#0070f3', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}>Sign Up Free</button>
+          <button onClick={() => navigate('/api/login')} style={{ padding: '8px 16px', backgroundColor: 'transparent', color: '#111', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}>Log in</button>
+          <button onClick={() => navigate('/api/signup')} style={{ padding: '8px 16px', backgroundColor: '#0070f3', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}>Sign Up Free</button>
         </div>
       </nav>
 
@@ -28,7 +28,7 @@ function LandingPage() {
           Stop guessing why your code is slow. Get instant Time & Space complexity analysis, professional feedback, and an auto-generated Kanban roadmap to crush your next technical interview.
         </p>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
-          <button onClick={() => navigate('/signup')} style={{ padding: '14px 28px', fontSize: '1.1rem', backgroundColor: '#111', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 4px 14px 0 rgba(0,0,0,0.1)' }}>
+          <button onClick={() => navigate('/api/signup')} style={{ padding: '14px 28px', fontSize: '1.1rem', backgroundColor: '#111', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 4px 14px 0 rgba(0,0,0,0.1)' }}>
             Start Analyzing Now
           </button>
         </div>
@@ -70,7 +70,7 @@ function AuthScreen({ setToken, initialMode }) {
 
   // Sync state if URL changes between /login and /signup
   useEffect(() => {
-    setIsLogin(location.pathname === '/login');
+    setIsLogin(location.pathname === '/api/login');
   }, [location.pathname]);
 
   const handleSubmit = async (e) => {
@@ -89,9 +89,9 @@ function AuthScreen({ setToken, initialMode }) {
       if (isLogin) {
         localStorage.setItem('token', data.access_token);
         setToken(data.access_token);
-        navigate('/dashboard'); 
+        navigate('/api/dashboard'); 
       } else {
-        navigate('/login');
+        navigate('/api/login');
         setError('Signup successful! Please log in with your new credentials.');
       }
     } catch (err) {
@@ -141,7 +141,7 @@ function AuthScreen({ setToken, initialMode }) {
         
         <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '14px', color: '#666' }}>
           {isLogin ? "Don't have an account? " : "Already have an account? "}
-          <span style={{ color: '#0070f3', cursor: 'pointer', fontWeight: '600' }} onClick={() => navigate(isLogin ? '/signup' : '/login')}>
+          <span style={{ color: '#0070f3', cursor: 'pointer', fontWeight: '600' }} onClick={() => navigate(isLogin ? '/api/signup' : '/api/login')}>
             {isLogin ? 'Sign up' : 'Log in'}
           </span>
         </p>
@@ -453,13 +453,13 @@ function App() {
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={!token ? <LandingPage /> : <Navigate to="/dashboard" />} />
-        <Route path="/login" element={!token ? <AuthScreen setToken={setToken} initialMode="login" /> : <Navigate to="/dashboard" />} />
-        <Route path="/signup" element={!token ? <AuthScreen setToken={setToken} initialMode="signup" /> : <Navigate to="/dashboard" />} />
+        <Route path="/api/login" element={!token ? <AuthScreen setToken={setToken} initialMode="login" /> : <Navigate to="/dashboard" />} />
+        <Route path="/api/signup" element={!token ? <AuthScreen setToken={setToken} initialMode="signup" /> : <Navigate to="/dashboard" />} />
         
         {/* Protected Routes */}
-        <Route path="/dashboard" element={token ? <Dashboard token={token} setToken={setToken} /> : <Navigate to="/login" />} />
-        <Route path="/history" element={token ? <HistoryDashboard token={token} setToken={setToken} /> : <Navigate to="/login" />} />
-        <Route path="/tracker" element={token ? <ProblemTracker token={token} setToken={setToken} /> : <Navigate to="/login" />} />
+        <Route path="/api/dashboard" element={token ? <Dashboard token={token} setToken={setToken} /> : <Navigate to="/api/login" />} />
+        <Route path="/api/history" element={token ? <HistoryDashboard token={token} setToken={setToken} /> : <Navigate to="/api/login" />} />
+        <Route path="/api/tracker" element={token ? <ProblemTracker token={token} setToken={setToken} /> : <Navigate to="/api/login" />} />
       </Routes>
     </Router>
   );
