@@ -79,7 +79,7 @@ function AuthScreen({ setToken, initialMode }) {
     const endpoint = isLogin ? '/api/login' : '/api/signup';
 
     try {
-      const response = await fetch(`http://code-mentor-10f65kg2o-himanshus-projects-219f5ecf.vercel.app${endpoint}`, {
+      const response = await fetch(`https://code-mentor-10f65kg2o-himanshus-projects-219f5ecf.vercel.app${endpoint}`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
@@ -104,7 +104,7 @@ function AuthScreen({ setToken, initialMode }) {
   const handleGoogleSuccess = async (credentialResponse) => {
     setLoading(true); setError('');
     try {
-      const response = await fetch('http://code-mentor-10f65kg2o-himanshus-projects-219f5ecf.vercel.app/api/google-login', {
+      const response = await fetch('https://code-mentor-10f65kg2o-himanshus-projects-219f5ecf.vercel.app/api/google-login', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: credentialResponse.credential }),
       });
@@ -209,7 +209,7 @@ function Dashboard({ token, setToken }) {
     if (!code.trim()) return;
     setLoading(true); setError(''); setAnalysis(null); setChartData([]);
     try {
-      const response = await fetch('http://code-mentor-10f65kg2o-himanshus-projects-219f5ecf.vercel.app/api/review', {
+      const response = await fetch('https://code-mentor-10f65kg2o-himanshus-projects-219f5ecf.vercel.app/api/review', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ code, problem_title: problemTitle, problem_url: problemUrl }),
@@ -302,7 +302,7 @@ function ProblemTracker({ token, setToken }) {
 
   const fetchProblems = async () => {
     try {
-      const response = await fetch('http://code-mentor-10f65kg2o-himanshus-projects-219f5ecf.vercel.app/api/problems', { headers: { 'Authorization': `Bearer ${token}` } });
+      const response = await fetch('https://code-mentor-10f65kg2o-himanshus-projects-219f5ecf.vercel.app/api/problems', { headers: { 'Authorization': `Bearer ${token}` } });
       const data = await response.json();
       if (response.ok) setProblems(data.problems);
     } catch (err) { console.error(err); } finally { setLoading(false); }
@@ -313,7 +313,7 @@ function ProblemTracker({ token, setToken }) {
     e.preventDefault();
     if (!newTitle.trim()) return;
     try {
-      const response = await fetch('http://code-mentor-10f65kg2o-himanshus-projects-219f5ecf.vercel.app/api/problems', {
+      const response = await fetch('https://code-mentor-10f65kg2o-himanshus-projects-219f5ecf.vercel.app/api/problems', {
         method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ title: newTitle, url: newUrl, status: 'Todo' })
       });
@@ -323,7 +323,7 @@ function ProblemTracker({ token, setToken }) {
 
   const updateStatus = async (id, newStatus) => {
     try {
-      await fetch(`http://code-mentor-10f65kg2o-himanshus-projects-219f5ecf.vercel.app/api/problems/${id}`, {
+      await fetch(`https://code-mentor-10f65kg2o-himanshus-projects-219f5ecf.vercel.app/api/problems/${id}`, {
         method: 'PUT', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ status: newStatus })
       });
@@ -333,7 +333,7 @@ function ProblemTracker({ token, setToken }) {
 
   const deleteProblem = async (id) => {
     try {
-      await fetch(`http://code-mentor-10f65kg2o-himanshus-projects-219f5ecf.vercel.app/api/problems/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+      await fetch(`https://code-mentor-10f65kg2o-himanshus-projects-219f5ecf.vercel.app/api/problems/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
       fetchProblems();
     } catch (err) { console.error(err); }
   };
@@ -403,7 +403,7 @@ function HistoryDashboard({ token, setToken }) {
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const response = await fetch('http://code-mentor-10f65kg2o-himanshus-projects-219f5ecf.vercel.app/api/history', { headers: { 'Authorization': `Bearer ${token}` } });
+        const response = await fetch('https://code-mentor-10f65kg2o-himanshus-projects-219f5ecf.vercel.app/api/history', { headers: { 'Authorization': `Bearer ${token}` } });
         const data = await response.json();
         if (response.ok) setHistory(data.history);
       } catch (err) { console.error(err); } finally { setLoading(false); }
