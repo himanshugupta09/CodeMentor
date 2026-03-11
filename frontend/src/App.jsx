@@ -234,8 +234,8 @@ function Dashboard({ token, setToken }) {
           <p style={{ color: '#666', margin: 0 }}>Paste your code below for architectural review.</p>
         </div>
         <div style={{ display: 'flex', gap: '1rem' }}>
-          <button onClick={() => navigate('/tracker')} style={{ padding: '8px 16px', backgroundColor: '#8b5cf6', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>📋 Kanban Tracker</button>
-          <button onClick={() => navigate('/history')} style={{ padding: '8px 16px', backgroundColor: '#10b981', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>📚 Vault</button>
+          <button onClick={() => navigate('/api/tracker')} style={{ padding: '8px 16px', backgroundColor: '#8b5cf6', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>📋 Kanban Tracker</button>
+          <button onClick={() => navigate('/api/history')} style={{ padding: '8px 16px', backgroundColor: '#10b981', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>📚 Vault</button>
           <button onClick={handleLogout} style={{ padding: '8px 16px', backgroundColor: 'transparent', color: '#ef4444', border: '1px solid #ef4444', borderRadius: '4px', cursor: 'pointer' }}>Logout</button>
         </div>
       </div>
