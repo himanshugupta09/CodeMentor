@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocat
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'https://code-mentor-pi.vercel.app';
-
 // ==========================================
 // KEEP-ALIVE: ping backend every 4 min to prevent Vercel cold starts
 // ==========================================
