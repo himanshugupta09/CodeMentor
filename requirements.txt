@@ -8,6 +8,16 @@ google-auth
 requests
 gunicorn
 psycopg2-binary
+flask
+flask-cors
+flask-sqlalchemy
+flask-bcrypt
+flask-jwt-extended
+flask-limiter
+python-dotenv
+requests
+google-auth
+gunicorn
 
 # Optional / environment-specific (uncomment if needed)
 # bcrypt
