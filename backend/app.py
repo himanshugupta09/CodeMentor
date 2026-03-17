@@ -9,27 +9,43 @@ from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
-from google.oauth2 import id_token
-from google.auth.transport import requests as google_requests
+
+# Safe import — flask_limiter is optional; app works without it
+try:
+    from flask_limiter import Limiter
+    from flask_limiter.util import get_remote_address
+    LIMITER_AVAILABLE = True
+except ImportError:
+    LIMITER_AVAILABLE = False
+
+# Safe import — google-auth is optional; only needed for Google OAuth
+try:
+    from google.oauth2 import id_token
+    from google.auth.transport import requests as google_requests
+    GOOGLE_AUTH_AVAILABLE = True
+except ImportError:
+    GOOGLE_AUTH_AVAILABLE = False
 
 load_dotenv()
 
 app = Flask(__name__)
 
 # ==========================================
-# CORS — single clean config, no duplicates
-# FIX: wildcard origin + supports_credentials=True is rejected by all browsers.
-# Lock to your exact frontend origin and let flask-cors handle preflight caching.
+# CORS — single clean config
+# Both Vercel URLs whitelisted so frontend on either domain works.
+# max_age=86400 tells the browser to cache the preflight for 24 hours,
+# eliminating the repeated OPTIONS calls you saw in the network tab.
 # ==========================================
-
 ALLOWED_ORIGINS = [
-    "https://code-mentor-app.vercel.app",   # ← your actual frontend
-    "https://code-mentor-pi.vercel.app",    # ← old URL, keep during transition
-    "http://localhost:5173",                 # ← local dev
+    "https://code-mentor-app.vercel.app",   # primary frontend
+    "https://code-mentor-pi.vercel.app",    # secondary / old URL
+    "http://localhost:5173",                 # local dev
+    "http://localhost:3000",
 ]
-#FRONTEND_ORIGIN = os.getenv("FRONTEND_ORIGIN", "https://code-mentor-app.vercel.app")
+# Also allow any extra origin set via env var (no need to redeploy for new domains)
+extra = os.getenv("FRONTEND_ORIGIN", "")
+if extra:
+    ALLOWED_ORIGINS.append(extra)
 
 CORS(app, resources={r"/api/*": {
     "origins": ALLOWED_ORIGINS,
@@ -37,16 +53,24 @@ CORS(app, resources={r"/api/*": {
     "max_age": 86400
 }})
 
-
 # ==========================================
-# Rate limiting — protect AI endpoint from abuse / cost runaway
+# Rate limiting — no-op fallback if package missing
 # ==========================================
-limiter = Limiter(
-    get_remote_address,
-    app=app,
-    default_limits=["500/day", "100/hour"],
-    storage_uri="memory://"
-)
+if LIMITER_AVAILABLE:
+    limiter = Limiter(
+        get_remote_address,
+        app=app,
+        default_limits=["500/day", "100/hour"],
+        storage_uri="memory://"
+    )
+else:
+    # Dummy limiter so @limiter.limit() decorators don't crash
+    class _NoopLimiter:
+        def limit(self, *a, **kw):
+            return lambda f: f
+        def exempt(self, f):
+            return f
+    limiter = _NoopLimiter()
 
 # ==========================================
 # App configuration
@@ -169,6 +193,8 @@ def login():
 @app.route('/api/google-login', methods=['POST'])
 @limiter.limit("20/hour")
 def google_login():
+    if not GOOGLE_AUTH_AVAILABLE:
+        return jsonify({"error": "Google login is not configured on this server. Please use email/password."}), 503
     try:
         data  = request.get_json()
         token = data.get('token')
