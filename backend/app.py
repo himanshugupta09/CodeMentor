@@ -23,12 +23,20 @@ app = Flask(__name__)
 # FIX: wildcard origin + supports_credentials=True is rejected by all browsers.
 # Lock to your exact frontend origin and let flask-cors handle preflight caching.
 # ==========================================
-FRONTEND_ORIGIN = os.getenv("FRONTEND_ORIGIN", "https://code-mentor-app.vercel.app")
+
+ALLOWED_ORIGINS = [
+    "https://code-mentor-app.vercel.app",   # ← your actual frontend
+    "https://code-mentor-pi.vercel.app",    # ← old URL, keep during transition
+    "http://localhost:5173",                 # ← local dev
+]
+#FRONTEND_ORIGIN = os.getenv("FRONTEND_ORIGIN", "https://code-mentor-app.vercel.app")
+
 CORS(app, resources={r"/api/*": {
-    "origins": [FRONTEND_ORIGIN, "http://localhost:5173"],
+    "origins": ALLOWED_ORIGINS,
     "supports_credentials": True,
-    "max_age": 86400          # browser caches preflight for 24 hours — kills repeated OPTIONS calls
+    "max_age": 86400
 }})
+
 
 # ==========================================
 # Rate limiting — protect AI endpoint from abuse / cost runaway
